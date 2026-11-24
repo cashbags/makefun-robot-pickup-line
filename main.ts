@@ -59,8 +59,13 @@ const LINE = "My actuators have one setting now: towards you.";
 
 // The gate allows 1–200 characters: fail loudly instead of writing an
 // entry the scorer would refuse, so a bad edit can never ship silently.
+// The entry must also be exactly one line: a newline inside it would break
+// the "single line" the gate and the judge both assume.
 if (LINE.length < 1 || LINE.length > 200 || LINE.trim().length === 0) {
   throw new Error(`line is ${LINE.length} chars; the gate needs 1–200`);
+}
+if (LINE.includes("\n") || LINE.includes("\r")) {
+  throw new Error("line must be a single line, no line breaks");
 }
 
 // The grader runs this program with no arguments; it then writes to
